@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Payment</title>
+</head>
+
+<body>
+
+    <form>
+        <script src="https://checkout.flutterwave.com/v3.js"></script>
+        <!-- <button type="button" onClick="makePayment('hurayy')">Pay Now</button> -->
+    </form>
+
+    <script>
+        function makePayment(indata) {
+            var datax = JSON.parse(indata);
+            FlutterwaveCheckout({
+                public_key: datax['public_key'],
+                tx_ref: datax['tx_ref'],
+                amount: datax['amount'],
+                currency: datax['currency'],
+                country: datax['country'],
+                payment_options: datax['payment_options'],
+                customer: {
+                    email: datax['customer']['email'],
+                    phone_number: datax['customer']['phone_number'],
+                    name: datax['customer']['name'],
+                },
+                customizations: {
+                    title: datax['customizations']['title'],
+                    description: datax['customizations']['description'],
+                    logo: datax['customizations']['logo'],
+                },
+                callback: function (data) {
+                    // specified callback function
+                    if (window.Payment !== undefined) {
+                        console.log(JSON.stringify(data));
+                        callPlatformSpecificMethod(JSON.stringify(data));
+                        //callPlatformSpecificMethod("Message from window console");
+                    } else {
+                        console.debug('not running inside a Flutter webview');
+                    }
+                },
+            });
+        }
+    </script>
+
+</body>
+
+</html>
